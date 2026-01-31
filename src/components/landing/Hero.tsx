@@ -17,30 +17,30 @@ export function Hero() {
                 >
                     <div className="mb-6 inline-flex items-center justify-center space-x-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 backdrop-blur-sm">
                         <Sparkles className="h-4 w-4 text-primary" />
-                        <span className="text-sm font-medium text-primary-foreground/90 text-gray-600">Weekly Reflection & Planning</span>
+                        <span className="text-sm font-medium text-primary-foreground/90 text-gray-600">Haftalık Refleksiyon & Planlama</span>
                     </div>
 
                     <h1 className="mb-6 font-display text-5xl font-bold tracking-tight text-gray-900 md:text-7xl">
-                        Reflect on the past. <br />
+                        Geçmişi düşün. <br />
                         <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                            Plan for the future.
+                            Geleceği planla.
                         </span>
                     </h1>
 
                     <p className="mx-auto mb-10 max-w-2xl text-lg text-gray-600 md:text-xl">
-                        A minimal tool to help you close the week with clarity. Compare what you planned vs what you actually did, and set your intentions for the week ahead.
+                        Haftayı net bir şekilde kapatmana yardımcı olacak minimal bir araç. Ne planladığın ile ne yaptığını karşılaştır ve gelecek hafta için niyetlerini belirle.
                     </p>
 
                     <div className="flex flex-col items-center justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
-                        <Link href="/auth/signup">
+                        <Link href="/signup">
                             <Button size="lg" className="group">
-                                Start Reflecting
+                                Hemen Başla
                                 <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                             </Button>
                         </Link>
                         <Link href="#how-it-works">
                             <Button variant="outline" size="lg">
-                                How it works
+                                Nasıl Çalışır
                             </Button>
                         </Link>
                     </div>

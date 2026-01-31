@@ -24,9 +24,9 @@ export function WeekEndModal({ open, onOpenChange }: { open: boolean, onOpenChan
         <Dialog open={open} onOpenChange={onOpenChange}>
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                    <DialogTitle className="text-2xl font-bold">Weekly Reflection</DialogTitle>
+                    <DialogTitle className="text-2xl font-bold">Haftalık Refleksiyon</DialogTitle>
                     <DialogDescription>
-                        Review your week before locking in your progress and starting fresh.
+                        İlerlemeni kaydetmeden ve yeni bir haftaya başlamadan önce haftanı değerlendir.
                     </DialogDescription>
                 </DialogHeader>
 
@@ -36,10 +36,10 @@ export function WeekEndModal({ open, onOpenChange }: { open: boolean, onOpenChan
 
                 <DialogFooter>
                     <Button variant="outline" onClick={() => onOpenChange(false)}>
-                        Cancel
+                        İptal
                     </Button>
                     <Button onClick={handleComplete} className="gap-2">
-                        Start Next Week
+                        Yeni Haftaya Başla
                         <ArrowRight className="h-4 w-4" />
                     </Button>
                 </DialogFooter>

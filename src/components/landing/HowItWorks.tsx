@@ -6,18 +6,18 @@ import { ArrowDown } from 'lucide-react';
 const steps = [
     {
         step: 1,
-        title: "Plan Your Week",
-        description: "Fill out 'What I Will Do' for the upcoming week. Be realistic and intentional.",
+        title: "Haftanı Planla",
+        description: "Gelecek hafta için 'Ne Yapacağım' kısmını doldur. Gerçekçi ve niyetli ol.",
     },
     {
         step: 2,
-        title: "Lock & Execute",
-        description: "Lock your plan. Focus on execution. You can track 'What I Did' as you go.",
+        title: "Kilitle ve Uygula",
+        description: "Planını kilitle. Uygulamaya odaklan. İlerledikçe 'Ne Yaptım' kısmını takip edebilirsin.",
     },
     {
         step: 3,
-        title: "Reflect & Compare",
-        description: "At the end of the week, the cycle unlocks. Compare your plan vs reality.",
+        title: "Yansıt ve Karşılaştır",
+        description: "Hafta sonunda döngü açılır. Planın ile gerçekte olanı karşılaştır.",
     },
 ];
 
@@ -30,7 +30,7 @@ export function HowItWorks() {
             <div className="container mx-auto px-4">
                 <div className="mb-16 text-center">
                     <h2 className="mb-4 text-3xl font-bold font-display text-gray-900 md:text-4xl">
-                        How it works
+                        Nasıl Çalışır
                     </h2>
                 </div>
 

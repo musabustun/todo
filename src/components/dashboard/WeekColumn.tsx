@@ -14,26 +14,29 @@ interface WeekColumnProps {
     tasks: Task[];
     accentColor?: string;
     isRestricted?: boolean; // For Planned column which might be read-only for adding
+    isDropDisabled?: boolean; // Added prop
 }
 
-export function WeekColumn({ title, category, tasks, accentColor = 'bg-gray-100', isRestricted }: WeekColumnProps) {
+export function WeekColumn({ title, category, tasks, accentColor = 'bg-gray-100', isRestricted, isDropDisabled }: WeekColumnProps) {
     const { setNodeRef } = useDroppable({
         id: category,
+        disabled: isDropDisabled, // Use prop
     });
 
-    const { addTask } = useWeekStore();
+    const { addTask, currentWeek } = useWeekStore(); // Get currentWeek
     const [isAdding, setIsAdding] = useState(false);
     const [newTaskContent, setNewTaskContent] = useState('');
 
     const handleAddTask = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!newTaskContent.trim()) {
-            setIsAdding(false);
+            // setIsAdding(false); // Removed as per instruction
             return;
         }
         await addTask(category, newTaskContent);
         setNewTaskContent('');
-        setIsAdding(false);
+        // Keep input focused? Or clear/close?
+        // simple behavior: keep input for multiple additions
     };
 
     return (
@@ -57,35 +60,30 @@ export function WeekColumn({ title, category, tasks, accentColor = 'bg-gray-100'
                     ))}
                 </SortableContext>
 
-                {tasks.length === 0 && !isAdding && (
-                    <div className="flex flex-col items-center justify-center py-8 text-center">
-                        <p className="text-sm text-gray-400">Empty list</p>
+                {tasks.length === 0 && ( // Removed !isAdding
+                    <div className="flex h-32 items-center justify-center rounded-xl border border-dashed border-gray-200 bg-gray-50/50 text-sm text-gray-400">
+                        Henüz görev yok
                     </div>
                 )}
 
-                {/* Add Task Input */}
-                {isAdding ? (
-                    <form onSubmit={handleAddTask} className="mt-2">
-                        <input
-                            autoFocus
-                            type="text"
-                            value={newTaskContent}
-                            onChange={(e) => setNewTaskContent(e.target.value)}
-                            onBlur={() => !newTaskContent && setIsAdding(false)}
-                            placeholder="Type a task..."
-                            className="w-full rounded-xl border border-primary px-3 py-3 text-sm shadow-sm outline-none placeholder:text-gray-400"
-                        />
+                {/* Add Input - Only allow adding if not 'planned' usually? Or allow all? */}
+                {/* Design choice: Can user add to "Planned" mid-week? Maybe not. */}
+                {category !== 'planned' && !currentWeek?.is_locked && (
+                    <form
+                        onSubmit={handleAddTask}
+                        className="mt-4 flex items-center gap-2"
+                    >
+                        <div className="relative flex-1">
+                            <Plus className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                            <input
+                                type="text"
+                                value={newTaskContent}
+                                onChange={(e) => setNewTaskContent(e.target.value)}
+                                placeholder="Görev ekle..."
+                                className="h-10 w-full rounded-lg border border-gray-200 bg-white pl-9 pr-3 text-sm placeholder-gray-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                            />
+                        </div>
                     </form>
-                ) : (
-                    !isRestricted && (
-                        <button
-                            onClick={() => setIsAdding(true)}
-                            className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-gray-300 py-3 text-sm font-medium text-gray-500 hover:border-primary hover:text-primary transition-colors hover:bg-white"
-                        >
-                            <Plus className="h-4 w-4" />
-                            Add task
-                        </button>
-                    )
                 )}
             </div>
         </div>

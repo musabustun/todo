@@ -72,18 +72,19 @@ export default function Dashboard() {
             onDragEnd={handleDragEnd}
         >
             <div className="grid h-full gap-6 md:grid-cols-3">
-                {/* Planned - Read Only(ish) */}
+                {/* Column 1: Planned (Read Only / Checkable) */}
                 <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
                     <WeekColumn
-                        title="What I Planned"
                         category="planned"
+                        title="Ne Yapacaktım"
                         tasks={plannedTasks}
                         accentColor="bg-purple-100 text-purple-700"
                         isRestricted={currentWeek?.is_locked} // Can't add new planned tasks if locked (logic may vary)
+                        isDropDisabled={true} // Can't drop here usually, unless reverting? Let's say yes for now
                     />
                 </div>
 
-                {/* Done */}
+                {/* Column 2: What I Did (The focus) */}
                 <div className="rounded-3xl bg-white p-6 shadow-xl shadow-gray-200/50 ring-1 ring-primary/10 relative overflow-hidden">
                     <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-primary to-secondary" />
                     <WeekColumn

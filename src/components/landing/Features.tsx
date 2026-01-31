@@ -6,20 +6,20 @@ import { Columns, GitCompare, Lock, CheckCircle } from 'lucide-react';
 const features = [
     {
         icon: Columns,
-        title: 'Three-Column System',
-        description: 'Structure your thoughts into What I Planned, What I Did, and What I Will Do.',
+        title: 'Üç Sütunlu Sistem',
+        description: 'Düşüncelerini Ne Yapacaktım, Ne Yaptım ve Ne Yapacağım olarak yapılandır.',
         color: 'bg-primary/10 text-primary',
     },
     {
         icon: Lock,
-        title: 'Weekly Lock',
-        description: 'Commit to your plan. Once locked, your planned tasks are set until the next cycle.',
+        title: 'Haftalık Kilit',
+        description: 'Planına sadık kal. Kilitlendiğinde, planlanan görevlerin bir sonraki döngüye kadar sabitlenir.',
         color: 'bg-secondary/10 text-secondary-foreground', // using peach
     },
     {
         icon: GitCompare,
-        title: 'Visual Diff',
-        description: 'See the gap between intention and action with a Git-style comparison view.',
+        title: 'Görsel Karşılaştırma',
+        description: 'Niyet ve eylem arasındaki farkı Git tarzı bir karşılaştırma görünümü ile gör.',
         color: 'bg-accent/20 text-accent-foreground',
     },
 ];
@@ -30,10 +30,10 @@ export function Features() {
             <div className="container mx-auto px-4">
                 <div className="mb-16 text-center">
                     <h2 className="mb-4 text-3xl font-bold font-display text-gray-900 md:text-4xl">
-                        Simple yet powerful workflow
+                        Basit ama güçlü bir akış
                     </h2>
                     <p className="mx-auto max-w-2xl text-gray-600">
-                        Designed to help you build consistency without the overwhelm of complex project management tools.
+                        Karmaşık proje yönetim araçlarının yükü olmadan tutarlılık oluşturman için tasarlandı.
                     </p>
                 </div>
 

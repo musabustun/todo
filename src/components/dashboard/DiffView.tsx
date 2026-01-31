@@ -27,7 +27,7 @@ export function DiffView({ plannedTasks, doneTasks }: DiffViewProps) {
         <div className="grid gap-8 md:grid-cols-2">
             {/* Planned vs Actual Column */}
             <div className="space-y-6">
-                <h3 className="text-xl font-bold text-gray-900">Planned vs Reality</h3>
+                <h3 className="text-xl font-bold text-gray-900">Planlanan vs Gerçekleşen</h3>
                 <div className="space-y-3">
                     {plannedTasks.map((task, index) => (
                         <motion.div
@@ -57,21 +57,21 @@ export function DiffView({ plannedTasks, doneTasks }: DiffViewProps) {
                                     {task.content}
                                 </p>
                                 <p className="text-xs text-gray-500">
-                                    {task.is_completed ? "Completed as planned" : "Not completed"}
+                                    {task.is_completed ? "Planlandığı gibi tamamlandı" : "Tamamlanmadı"}
                                 </p>
                             </div>
                         </motion.div>
                     ))}
 
                     {plannedTasks.length === 0 && (
-                        <p className="text-gray-400 italic">No planned tasks for this week.</p>
+                        <p className="text-gray-400 italic">Bu hafta için planlanan görev yok.</p>
                     )}
                 </div>
             </div>
 
             {/* Extra Achievements Column */}
             <div className="space-y-6">
-                <h3 className="text-xl font-bold text-gray-900">Extra Achievements</h3>
+                <h3 className="text-xl font-bold text-gray-900">Ekstra Başarılar</h3>
                 <div className="space-y-3">
                     {doneTasks.map((task, index) => (
                         <motion.div
@@ -86,13 +86,13 @@ export function DiffView({ plannedTasks, doneTasks }: DiffViewProps) {
                             </div>
                             <div className="flex-1">
                                 <p className="font-medium text-blue-900">{task.content}</p>
-                                <p className="text-xs text-blue-600/70">Unplanned achievement</p>
+                                <p className="text-xs text-blue-600/70">Plan dışı başarı</p>
                             </div>
                         </motion.div>
                     ))}
 
                     {doneTasks.length === 0 && (
-                        <p className="text-gray-400 italic">No extra achievements recorded.</p>
+                        <p className="text-gray-400 italic">Ekstra başarı kaydedilmedi.</p>
                     )}
                 </div>
             </div>

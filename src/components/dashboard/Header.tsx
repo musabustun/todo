@@ -19,7 +19,7 @@ export function Header() {
 
     const handleSignOut = async () => {
         await supabase.auth.signOut();
-        router.push('/auth/login');
+        router.push('/login');
     };
 
     useEffect(() => {
@@ -31,10 +31,10 @@ export function Header() {
             const diffHours = differenceInHours(unlockDate, now);
 
             if (diffHours < 0) {
-                setTimeLeft('Ready to unlock');
+                setTimeLeft('Açılmaya Hazır');
             } else {
                 const diffMins = differenceInMinutes(unlockDate, now) % 60;
-                setTimeLeft(`${diffHours}h ${diffMins}m`);
+                setTimeLeft(`${diffHours}s ${diffMins}dk`);
             }
         }, 60000);
 
@@ -42,7 +42,7 @@ export function Header() {
         const now = new Date();
         const diffHours = differenceInHours(unlockDate, now);
         if (diffHours < 0) {
-            setTimeLeft('Ready to unlock');
+            setTimeLeft('Açılmaya Hazır');
         } else {
             const diffMins = differenceInMinutes(unlockDate, now) % 60;
             setTimeLeft(`${diffHours}h ${diffMins}m`);
@@ -52,7 +52,7 @@ export function Header() {
     }, [currentWeek?.locked_at]);
 
     const isLocked = currentWeek?.is_locked;
-    const isReadyToUnlock = timeLeft === 'Ready to unlock';
+    const isReadyToUnlock = timeLeft === 'Açılmaya Hazır';
 
     return (
         <>
@@ -65,7 +65,7 @@ export function Header() {
                         </Link>
                         <div className="hidden h-6 w-px bg-gray-200 md:block" />
                         <div className="hidden md:block">
-                            <span className="text-sm font-medium text-gray-500">Current Week</span>
+                            <span className="text-sm font-medium text-gray-500">Bu Hafta</span>
                             {currentWeek && (
                                 <span className="ml-2 text-sm font-semibold text-gray-900">
                                     {format(new Date(currentWeek.start_date), 'MMM d')} - {format(new Date(currentWeek.end_date), 'MMM d')}
@@ -84,7 +84,7 @@ export function Header() {
                                 size="sm"
                             >
                                 <Lock className="h-3.5 w-3.5" />
-                                Lock Plan
+                                Planı Kilitle
                             </Button>
                         )}
 
@@ -100,7 +100,7 @@ export function Header() {
                                     className="h-8 text-xs"
                                     onClick={() => setIsModalOpen(true)}
                                 >
-                                    {isReadyToUnlock ? "Unlock & Reflect" : "End Week Early"}
+                                    {isReadyToUnlock ? "Kilidi Aç & Değerlendir" : "Haftayı Bitir"}
                                 </Button>
                             </div>
                         )}
@@ -119,7 +119,7 @@ export function Header() {
                                     className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
                                 >
                                     <LogOut className="h-4 w-4" />
-                                    Sign Out
+                                    Çıkış Yap
                                 </button>
                             </div>
                         </div>
