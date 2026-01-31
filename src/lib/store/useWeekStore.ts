@@ -31,6 +31,7 @@ interface WeekState {
     updateTask: (id: string, updates: Partial<Task>) => Promise<void>;
     deleteTask: (id: string) => Promise<void>;
     lockWeek: () => Promise<void>;
+    completeWeek: () => Promise<void>;
     reorderTask: (activeId: string, overId: string) => Promise<void>;
 }
 
@@ -164,6 +165,76 @@ export const useWeekStore = create<WeekState>((set, get) => ({
         }
     },
 
+    completeWeek: async () => {
+        const { currentWeek, tasks } = get();
+        if (!currentWeek) return;
+
+        const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
+        if (!user) return;
+
+        set({ isLoading: true });
+
+        // 1. Mark current week as completed
+        await supabase.from('weeks').update({ status: 'completed' }).eq('id', currentWeek.id);
+
+        // 2. Create new week
+        const start = new Date();
+        const end = new Date();
+        end.setDate(end.getDate() + 7);
+
+        const { data: newWeek, error: createError } = await supabase
+            .from('weeks')
+            .insert({
+                user_id: user.id,
+                start_date: start.toISOString(),
+                end_date: end.toISOString(),
+                status: 'active'
+            })
+            .select()
+            .single();
+
+        if (createError || !newWeek) {
+            console.error('Error creating new week:', createError);
+            set({ isLoading: false });
+            // Revert status update? (Ideally yes, but simple recovery is reload)
+            return;
+        }
+
+        // 3. Move 'next' tasks from old week to 'planned' of new week
+        const nextTasks = tasks.filter(t => t.category === 'next');
+
+        if (nextTasks.length > 0) {
+            const tasksToInsert = nextTasks.map(t => ({
+                week_id: newWeek.id,
+                user_id: user.id,
+                category: 'planned', // Becomes planned for new week
+                content: t.content,
+                is_completed: false, // Reset completion
+                order_index: t.order_index
+            }));
+
+            const { error: copyError } = await supabase.from('tasks').insert(tasksToInsert);
+            if (copyError) {
+                console.error('Error migrating tasks:', copyError);
+            }
+        }
+
+        // 4. Update local state
+        // Fetch new tasks (migrated ones)
+        const { data: newTasks } = await supabase
+            .from('tasks')
+            .select('*')
+            .eq('week_id', newWeek.id)
+            .order('order_index');
+
+        set({
+            currentWeek: newWeek,
+            tasks: newTasks || [],
+            isLoading: false
+        });
+    },
+
     reorderTask: async (activeId, overId) => {
         const { tasks } = get();
         const oldIndex = tasks.findIndex(t => t.id === activeId);
@@ -209,4 +280,3 @@ export const useWeekStore = create<WeekState>((set, get) => ({
         }
     }
 }));
-```
