@@ -95,9 +95,9 @@ export function Header() {
                                     <span>{timeLeft}</span>
                                 </div>
                                 <Button
-                                    variant={isReadyToUnlock ? "default" : "outline"}
+                                    variant={isReadyToUnlock ? "primary" : "outline"}
                                     size="sm"
-                                    className={clsx("h-8 text-xs", isReadyToUnlock && "bg-green-600 hover:bg-green-700")}
+                                    className="h-8 text-xs"
                                     onClick={() => setIsModalOpen(true)}
                                 >
                                     {isReadyToUnlock ? "Unlock & Reflect" : "End Week Early"}
@@ -125,7 +125,7 @@ export function Header() {
                         </div>
                     </div>
                 </div>
-            </header>
+            </header >
             <WeekEndModal open={isModalOpen} onOpenChange={setIsModalOpen} />
         </>
     );
