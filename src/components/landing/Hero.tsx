@@ -2,54 +2,57 @@
 
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
 export function Hero() {
     return (
-        <section className="relative overflow-hidden pt-32 pb-20 lg:pt-40 lg:pb-32">
-            <div className="container mx-auto px-4 text-center">
+        <section className="relative overflow-hidden pt-36 pb-24 lg:pt-48 lg:pb-40 bg-grain">
+            <div className="container mx-auto px-6 text-center relative z-10">
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
-                    className="relative z-10 mx-auto max-w-4xl"
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }} // smooth easeOutExpo-ish
+                    className="mx-auto max-w-5xl"
                 >
-                    <div className="mb-6 inline-flex items-center justify-center space-x-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 backdrop-blur-sm">
-                        <Sparkles className="h-4 w-4 text-primary" />
-                        <span className="text-sm font-medium text-primary-foreground/90 text-gray-600">Haftalık Refleksiyon & Planlama</span>
+                    <div className="mb-8 inline-flex items-center justify-center border-y border-foreground/10 py-2 px-6">
+                        <span className="text-sm font-medium tracking-widest uppercase text-foreground-muted">
+                            Refleksiyon & Planlama Sistemleri
+                        </span>
                     </div>
 
-                    <h1 className="mb-6 font-display text-5xl font-bold tracking-tight text-gray-900 md:text-7xl">
-                        Geçmişi düşün. <br />
-                        <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-                            Geleceği planla.
-                        </span>
+                    <h1 className="mb-8 font-serif text-6xl font-medium tracking-tight text-foreground md:text-8xl lg:text-9xl leading-[0.9]">
+                        Geçmişi <span className="italic text-primary">düşün</span>, <br />
+                        Geleceği <span className="italic text-secondary">planla</span>.
                     </h1>
 
-                    <p className="mx-auto mb-10 max-w-2xl text-lg text-gray-600 md:text-xl">
-                        Haftayı net bir şekilde kapatmana yardımcı olacak minimal bir araç. Ne planladığın ile ne yaptığını karşılaştır ve gelecek hafta için niyetlerini belirle.
+                    <p className="mx-auto mb-12 max-w-2xl text-xl text-foreground-muted md:text-2xl leading-relaxed font-light">
+                        Haftayı net bir şekilde kapatmana yardımcı olacak minimal bir araç.
+                        Ne planladığını, ne yaptığını gör; <span className="text-foreground font-medium underline decoration-accent decoration-2 underline-offset-4">niyetle inşa et.</span>
                     </p>
 
-                    <div className="flex flex-col items-center justify-center space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
+                    <div className="flex flex-col items-center justify-center space-y-4 sm:flex-row sm:space-x-6 sm:space-y-0">
                         <Link href="/signup">
-                            <Button size="lg" className="group">
+                            <Button size="lg" className="h-14 px-8 text-lg rounded-full bg-foreground text-background hover:bg-foreground/90 transition-all hover:scale-105">
                                 Hemen Başla
-                                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                                <ArrowRight className="ml-2 h-5 w-5" />
                             </Button>
                         </Link>
                         <Link href="#how-it-works">
-                            <Button variant="outline" size="lg">
+                            <Button variant="outline" size="lg" className="h-14 px-8 text-lg rounded-full border-foreground/20 hover:bg-foreground/5 hover:text-foreground">
                                 Nasıl Çalışır
                             </Button>
                         </Link>
                     </div>
                 </motion.div>
-
-                {/* Decorative background blobs */}
-                <div className="absolute top-0 left-1/2 -z-10 h-[600px] w-[600px] -translate-x-1/2 rounded-full bg-primary/10 blur-[100px]" />
-                <div className="absolute top-20 right-0 -z-10 h-[400px] w-[400px] rounded-full bg-secondary/10 blur-[100px]" />
             </div>
+
+            {/* Minimalist Background Elements */}
+            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
+            <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
+
+            {/* Subtle Gradient Glow */}
+            <div className="absolute top-1/2 left-1/2 -z-10 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-[120px]" />
         </section>
     );
 }

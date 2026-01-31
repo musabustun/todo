@@ -10,7 +10,7 @@ export default function Home() {
       <HowItWorks />
 
       {/* Footer */}
-      <footer className="py-10 text-center text-sm text-gray-500">
+      <footer className="py-10 text-center text-sm text-foreground-muted border-t border-foreground/5 font-sans">
         <p>© {new Date().getFullYear()} Reflect. Niyetle inşa et.</p>
       </footer>
     </main>

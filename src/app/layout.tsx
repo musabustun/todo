@@ -1,10 +1,10 @@
 import type { Metadata } from 'next'
-import { Inter, Plus_Jakarta_Sans } from 'next/font/google'
+import { Fraunces, DM_Sans } from 'next/font/google'
 import './globals.css'
 import { clsx } from 'clsx'
 
-const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
-const jakarta = Plus_Jakarta_Sans({ subsets: ['latin'], variable: '--font-jakarta' })
+const serif = Fraunces({ subsets: ['latin'], variable: '--font-serif', axes: ['SOFT', 'WONK', 'opsz'] })
+const sans = DM_Sans({ subsets: ['latin'], variable: '--font-sans' })
 
 export const metadata: Metadata = {
   title: 'Reflect - Haftalık Planlama & Refleksiyon',
@@ -18,7 +18,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="tr">
-      <body className={clsx(inter.variable, jakarta.variable, 'bg-background min-h-screen antialiased')}>
+      <body className={clsx(serif.variable, sans.variable, 'bg-background min-h-screen antialiased font-sans text-foreground')}>
         {children}
       </body>
     </html>
