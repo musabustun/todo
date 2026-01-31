@@ -88,7 +88,7 @@ export default function Dashboard() {
                 <div className="rounded-3xl bg-white p-6 shadow-xl shadow-gray-200/50 ring-1 ring-primary/10 relative overflow-hidden">
                     <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-primary to-secondary" />
                     <WeekColumn
-                        title="What I Did"
+                        title="Ne Yaptım"
                         category="done"
                         tasks={doneTasks}
                         accentColor="bg-green-100 text-green-700"
@@ -98,7 +98,7 @@ export default function Dashboard() {
                 {/* Next */}
                 <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
                     <WeekColumn
-                        title="What I Will Do"
+                        title="Ne Yapacağım"
                         category="next"
                         tasks={nextTasks}
                         accentColor="bg-blue-100 text-blue-700"

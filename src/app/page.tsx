@@ -11,7 +11,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="py-10 text-center text-sm text-gray-500">
-        <p>© {new Date().getFullYear()} Reflect. Build with intention.</p>
+        <p>© {new Date().getFullYear()} Reflect. Niyetle inşa et.</p>
       </footer>
     </main>
   );

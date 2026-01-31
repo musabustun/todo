@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useWeekStore } from '@/lib/store/useWeekStore';
 import { format, addDays, differenceInHours, differenceInMinutes } from 'date-fns';
+import { tr } from 'date-fns/locale';
 import { useEffect, useState } from 'react';
 import { WeekEndModal } from '@/components/dashboard/WeekEndModal';
 
@@ -45,7 +46,7 @@ export function Header() {
             setTimeLeft('Açılmaya Hazır');
         } else {
             const diffMins = differenceInMinutes(unlockDate, now) % 60;
-            setTimeLeft(`${diffHours}h ${diffMins}m`);
+            setTimeLeft(`${diffHours}s ${diffMins}dk`);
         }
 
         return () => clearInterval(interval);
@@ -68,7 +69,7 @@ export function Header() {
                             <span className="text-sm font-medium text-gray-500">Bu Hafta</span>
                             {currentWeek && (
                                 <span className="ml-2 text-sm font-semibold text-gray-900">
-                                    {format(new Date(currentWeek.start_date), 'MMM d')} - {format(new Date(currentWeek.end_date), 'MMM d')}
+                                    {format(new Date(currentWeek.start_date), 'd MMM', { locale: tr })} - {format(new Date(currentWeek.end_date), 'd MMM', { locale: tr })}
                                 </span>
                             )}
                         </div>

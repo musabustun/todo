@@ -76,7 +76,7 @@ export default function LoginPage() {
 
                 <div className="mt-6 text-center text-sm text-gray-500">
                     Hesabın yok mu?{' '}
-                    <Link href="/auth/signup" className="font-medium text-primary hover:text-primary/80">
+                    <Link href="/signup" className="font-medium text-primary hover:text-primary/80">
                         Kayıt ol
                     </Link>
                 </div>

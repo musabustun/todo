@@ -40,5 +40,5 @@ export async function signup(formData: FormData) {
         return { error: error.message };
     }
 
-    return { success: true, message: 'Check your email to continue sign in process.' };
+    return { success: true, message: 'Kayıt işlemine devam etmek için e-postanı kontrol et.' };
 }
