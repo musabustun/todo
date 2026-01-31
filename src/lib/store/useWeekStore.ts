@@ -31,6 +31,7 @@ interface WeekState {
     updateTask: (id: string, updates: Partial<Task>) => Promise<void>;
     deleteTask: (id: string) => Promise<void>;
     lockWeek: () => Promise<void>;
+    reorderTask: (activeId: string, overId: string) => Promise<void>;
 }
 
 export const useWeekStore = create<WeekState>((set, get) => ({
@@ -41,26 +42,47 @@ export const useWeekStore = create<WeekState>((set, get) => ({
     fetchCurrentWeek: async () => {
         set({ isLoading: true });
         const supabase = createClient();
+        const { data: { user } } = await supabase.auth.getUser();
 
-        // Logic to find active week or create one if none exists (simplified)
-        // For now, let's assume we fetch the latest active week
-        const { data: weekData, error: weekError } = await supabase
-            .from('weeks')
-            .select('*')
-            .eq('status', 'active')
-            .limit(1)
-            .single();
-
-        if (weekError && weekError.code !== 'PGRST116') {
-            console.error('Error fetching week:', weekError);
+        if (!user) {
             set({ isLoading: false });
             return;
         }
 
-        // If no active week, we might need to create one (logic to be added)
+        // 1. Try to find active week
+        let { data: weekData, error: weekError } = await supabase
+            .from('weeks')
+            .select('*')
+            .eq('user_id', user.id)
+            .eq('status', 'active')
+            .limit(1)
+            .maybeSingle();
+
+        // 2. If no active week, create one
         if (!weekData) {
-            set({ isLoading: false });
-            return;
+            // Check if there are ANY weeks (to determine if it's the very first one or just a finished cycle)
+            // For simplicity, just create a new active week starting today
+            const start = new Date();
+            const end = new Date();
+            end.setDate(end.getDate() + 7); // Default 7 days, but logic is driven by Lock
+
+            const { data: newWeek, error: createError } = await supabase
+                .from('weeks')
+                .insert({
+                    user_id: user.id,
+                    start_date: start.toISOString(),
+                    end_date: end.toISOString(),
+                    status: 'active'
+                })
+                .select()
+                .single();
+
+            if (createError) {
+                console.error('Error creating week:', createError);
+                set({ isLoading: false });
+                return;
+            }
+            weekData = newWeek;
         }
 
         const { data: tasksData, error: tasksError } = await supabase
@@ -68,10 +90,6 @@ export const useWeekStore = create<WeekState>((set, get) => ({
             .select('*')
             .eq('week_id', weekData.id)
             .order('order_index', { ascending: true });
-
-        if (tasksError) {
-            console.error('Error fetching tasks:', tasksError);
-        }
 
         set({
             currentWeek: weekData,
@@ -146,6 +164,32 @@ export const useWeekStore = create<WeekState>((set, get) => ({
         }
     },
 
+    reorderTask: async (activeId, overId) => {
+        const { tasks } = get();
+        const oldIndex = tasks.findIndex(t => t.id === activeId);
+        const newIndex = tasks.findIndex(t => t.id === overId);
+
+        if (oldIndex === -1 || newIndex === -1 || oldIndex === newIndex) return;
+
+        const newTasks = [...tasks];
+        const [movedTask] = newTasks.splice(oldIndex, 1);
+        newTasks.splice(newIndex, 0, movedTask);
+
+        // Update order_index for all tasks 
+        const updates = newTasks.map((t, index) => ({
+            id: t.id,
+            order_index: index
+        }));
+
+        // Optimistic update
+        set({ tasks: newTasks.map((t, i) => ({ ...t, order_index: i })) });
+
+        const supabase = createClient();
+        for (const update of updates) {
+            await supabase.from('tasks').update({ order_index: update.order_index }).eq('id', update.id);
+        }
+    },
+
     lockWeek: async () => {
         const { currentWeek } = get();
         if (!currentWeek) return;
@@ -165,3 +209,4 @@ export const useWeekStore = create<WeekState>((set, get) => ({
         }
     }
 }));
+```

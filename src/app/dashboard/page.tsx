@@ -1,54 +1,113 @@
-import { Plus } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+'use client';
+
+import { useEffect, useState } from 'react';
+import {
+    DndContext,
+    DragOverlay,
+    closestCorners,
+    KeyboardSensor,
+    PointerSensor,
+    useSensor,
+    useSensors,
+    DragStartEvent,
+    DragEndEvent
+} from '@dnd-kit/core';
+import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
+import { WeekColumn } from '@/components/dashboard/WeekColumn';
+import { TaskItem } from '@/components/dashboard/TaskItem';
+import { useWeekStore, Task } from '@/lib/store/useWeekStore';
+import { Loader2 } from 'lucide-react';
 
 export default function Dashboard() {
+    const { tasks, fetchCurrentWeek, isLoading, currentWeek, reorderTask } = useWeekStore();
+    const [activeTask, setActiveTask] = useState<Task | null>(null);
+
+    useEffect(() => {
+        fetchCurrentWeek();
+    }, [fetchCurrentWeek]);
+
+    const sensors = useSensors(
+        useSensor(PointerSensor),
+        useSensor(KeyboardSensor, {
+            coordinateGetter: sortableKeyboardCoordinates,
+        })
+    );
+
+    const plannedTasks = tasks.filter(t => t.category === 'planned');
+    const doneTasks = tasks.filter(t => t.category === 'done');
+    const nextTasks = tasks.filter(t => t.category === 'next');
+
+    // DnD Handlers
+    const handleDragStart = (event: DragStartEvent) => {
+        const { active } = event;
+        const task = tasks.find(t => t.id === active.id);
+        if (task) setActiveTask(task);
+    };
+
+    const handleDragEnd = (event: DragEndEvent) => {
+        const { active, over } = event;
+
+        if (!over) return;
+
+        if (active.id !== over.id) {
+            reorderTask(active.id as string, over.id as string);
+        }
+
+        setActiveTask(null);
+    };
+
+    if (isLoading && !currentWeek) {
+        return (
+            <div className="flex h-[50vh] items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
+            </div>
+        );
+    }
+
     return (
-        <div className="grid h-full gap-6 md:grid-cols-3">
-            {/* Column 1: What I Planned (Past) */}
-            <div className="flex flex-col rounded-3xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
-                <div className="mb-6 flex items-center justify-between">
-                    <h2 className="text-lg font-bold text-gray-900">What I Planned</h2>
-                    <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-600">0</span>
+        <DndContext
+            sensors={sensors}
+            collisionDetection={closestCorners}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+        >
+            <div className="grid h-full gap-6 md:grid-cols-3">
+                {/* Planned - Read Only(ish) */}
+                <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+                    <WeekColumn
+                        title="What I Planned"
+                        category="planned"
+                        tasks={plannedTasks}
+                        accentColor="bg-purple-100 text-purple-700"
+                        isRestricted={currentWeek?.is_locked} // Can't add new planned tasks if locked (logic may vary)
+                    />
                 </div>
 
-                <div className="flex-1 space-y-3">
-                    {/* Empty State / Tasks will go here */}
-                    <div className="flex flex-col items-center justify-center py-12 text-center">
-                        <p className="text-sm text-gray-400">No plans from last week found.</p>
-                    </div>
+                {/* Done */}
+                <div className="rounded-3xl bg-white p-6 shadow-xl shadow-gray-200/50 ring-1 ring-primary/10 relative overflow-hidden">
+                    <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-primary to-secondary" />
+                    <WeekColumn
+                        title="What I Did"
+                        category="done"
+                        tasks={doneTasks}
+                        accentColor="bg-green-100 text-green-700"
+                    />
+                </div>
+
+                {/* Next */}
+                <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+                    <WeekColumn
+                        title="What I Will Do"
+                        category="next"
+                        tasks={nextTasks}
+                        accentColor="bg-blue-100 text-blue-700"
+                    />
                 </div>
             </div>
 
-            {/* Column 2: What I Did (Present) */}
-            <div className="flex flex-col rounded-3xl bg-white p-6 shadow-xl shadow-gray-200/50 ring-1 ring-primary/10 relative overflow-hidden">
-                <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-primary to-secondary" />
-                <div className="mb-6 flex items-center justify-between">
-                    <h2 className="text-lg font-bold text-gray-900">What I Did</h2>
-                    <span className="rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-semibold text-green-700">0</span>
-                </div>
-
-                <div className="flex-1 space-y-3">
-                    <button className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-gray-300 py-3 text-sm font-medium text-gray-500 hover:border-primary hover:text-primary transition-colors">
-                        <Plus className="h-4 w-4" />
-                        Add completed task
-                    </button>
-                </div>
-            </div>
-
-            {/* Column 3: What I Will Do (Future) */}
-            <div className="flex flex-col rounded-3xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
-                <div className="mb-6 flex items-center justify-between">
-                    <h2 className="text-lg font-bold text-gray-900">What I Will Do</h2>
-                    <span className="rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-600">0</span>
-                </div>
-
-                <div className="flex-1 space-y-3">
-                    <button className="flex w-full items-center justify-center gap-2 rounded-xl border border-dashed border-gray-300 py-3 text-sm font-medium text-gray-500 hover:border-primary hover:text-primary transition-colors">
-                        <Plus className="h-4 w-4" />
-                        Add future task
-                    </button>
-                </div>
-            </div>
-        </div>
+            <DragOverlay>
+                {activeTask ? <TaskItem task={activeTask} isOverlay /> : null}
+            </DragOverlay>
+        </DndContext>
     );
 }
