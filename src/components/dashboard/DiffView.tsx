@@ -24,11 +24,11 @@ export function DiffView({ plannedTasks, doneTasks }: DiffViewProps) {
     // If user added a task to 'done', it is 'done' category.
 
     return (
-        <div className="grid gap-8 md:grid-cols-2">
+        <div className="grid gap-12 md:grid-cols-2">
             {/* Planned vs Actual Column */}
-            <div className="space-y-6">
-                <h3 className="text-xl font-bold text-gray-900">Planlanan vs Gerçekleşen</h3>
-                <div className="space-y-3">
+            <div className="space-y-8">
+                <h3 className="text-2xl font-serif text-foreground border-b border-foreground/10 pb-4">Planlanan vs Gerçekleşen</h3>
+                <div className="space-y-2">
                     {plannedTasks.map((task, index) => (
                         <motion.div
                             key={task.id}
@@ -36,63 +36,61 @@ export function DiffView({ plannedTasks, doneTasks }: DiffViewProps) {
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: index * 0.1 }}
                             className={clsx(
-                                "flex items-center gap-3 rounded-xl border p-4 shadow-sm",
-                                task.is_completed
-                                    ? "border-green-200 bg-green-50/50"
-                                    : "border-red-200 bg-red-50/50"
+                                "flex items-start gap-4 p-4 border-b border-foreground/5 last:border-0",
+                                task.is_completed ? "opacity-100" : "opacity-60"
                             )}
                         >
                             {task.is_completed ? (
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-green-100 text-green-600">
-                                    <CheckCircle className="h-5 w-5" />
+                                <div className="mt-1 flex h-5 w-5 items-center justify-center rounded-sm bg-success text-white">
+                                    <CheckCircle className="h-4 w-4" />
                                 </div>
                             ) : (
-                                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-red-100 text-red-600">
+                                <div className="mt-1 flex h-5 w-5 items-center justify-center rounded-sm text-error">
                                     <XCircle className="h-5 w-5" />
                                 </div>
                             )}
 
                             <div className="flex-1">
-                                <p className={clsx("font-medium", task.is_completed ? "text-green-900" : "text-red-900")}>
+                                <p className={clsx("text-base font-light text-foreground", !task.is_completed && "line-through decoration-error/30")}>
                                     {task.content}
                                 </p>
-                                <p className="text-xs text-gray-500">
-                                    {task.is_completed ? "Planlandığı gibi tamamlandı" : "Tamamlanmadı"}
+                                <p className="text-xs font-bold tracking-wider uppercase text-foreground-muted mt-1">
+                                    {task.is_completed ? "Tamamlandı" : "Tamamlanmadı"}
                                 </p>
                             </div>
                         </motion.div>
                     ))}
 
                     {plannedTasks.length === 0 && (
-                        <p className="text-gray-400 italic">Bu hafta için planlanan görev yok.</p>
+                        <p className="text-foreground-muted italic font-light">Bu hafta için planlanan görev yok.</p>
                     )}
                 </div>
             </div>
 
             {/* Extra Achievements Column */}
-            <div className="space-y-6">
-                <h3 className="text-xl font-bold text-gray-900">Ekstra Başarılar</h3>
-                <div className="space-y-3">
+            <div className="space-y-8">
+                <h3 className="text-2xl font-serif text-foreground border-b border-foreground/10 pb-4">Ekstra Başarılar</h3>
+                <div className="space-y-2">
                     {doneTasks.map((task, index) => (
                         <motion.div
                             key={task.id}
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             transition={{ delay: index * 0.1 }}
-                            className="flex items-center gap-3 rounded-xl border border-blue-200 bg-blue-50/50 p-4 shadow-sm"
+                            className="flex items-start gap-4 p-4 border-b border-foreground/5 last:border-0"
                         >
-                            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                            <div className="mt-1 flex h-5 w-5 items-center justify-center text-primary">
                                 <PlusCircle className="h-5 w-5" />
                             </div>
                             <div className="flex-1">
-                                <p className="font-medium text-blue-900">{task.content}</p>
-                                <p className="text-xs text-blue-600/70">Plan dışı başarı</p>
+                                <p className="text-base font-light text-foreground">{task.content}</p>
+                                <p className="text-xs font-bold tracking-wider uppercase text-foreground-muted mt-1">Plan Dışı</p>
                             </div>
                         </motion.div>
                     ))}
 
                     {doneTasks.length === 0 && (
-                        <p className="text-gray-400 italic">Ekstra başarı kaydedilmedi.</p>
+                        <p className="text-foreground-muted italic font-light">Ekstra başarı kaydedilmedi.</p>
                     )}
                 </div>
             </div>

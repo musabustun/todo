@@ -57,48 +57,48 @@ export function Header() {
 
     return (
         <>
-            <header className="fixed top-0 left-0 right-0 z-50 border-b border-gray-100 bg-white/80 backdrop-blur-md">
-                <div className="container mx-auto flex h-16 items-center justify-between px-4">
+            <header className="fixed top-0 left-0 right-0 z-50 border-b border-foreground/5 bg-background/80 backdrop-blur-md">
+                <div className="container mx-auto flex h-20 items-center justify-between px-6">
                     {/* Left: Logo & Week Info */}
-                    <div className="flex items-center gap-6">
-                        <Link href="/dashboard" className="text-xl font-bold tracking-tight text-gray-900">
-                            Reflect
+                    <div className="flex items-center gap-8">
+                        <Link href="/dashboard" className="text-2xl font-serif font-medium tracking-tight text-foreground hover:opacity-80 transition-opacity">
+                            Reflect.
                         </Link>
-                        <div className="hidden h-6 w-px bg-gray-200 md:block" />
+                        <div className="hidden h-8 w-px bg-foreground/10 md:block" />
                         <div className="hidden md:block">
-                            <span className="text-sm font-medium text-gray-500">Bu Hafta</span>
+                            <span className="block text-xs font-bold tracking-widest uppercase text-foreground-muted mb-0.5">Mevcut Döngü</span>
                             {currentWeek && (
-                                <span className="ml-2 text-sm font-semibold text-gray-900">
-                                    {format(new Date(currentWeek.start_date), 'd MMM', { locale: tr })} - {format(new Date(currentWeek.end_date), 'd MMM', { locale: tr })}
+                                <span className="text-sm font-serif text-foreground">
+                                    {format(new Date(currentWeek.start_date), 'd MMMM', { locale: tr })} — {format(new Date(currentWeek.end_date), 'd MMMM', { locale: tr })}
                                 </span>
                             )}
                         </div>
                     </div>
 
                     {/* Right: Actions */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-4">
                         {/* Lock Status & Actions */}
                         {currentWeek && !isLocked && (
                             <Button
                                 onClick={() => lockWeek()}
-                                className="mr-2 bg-gray-900 hover:bg-gray-800 text-white gap-2"
+                                className="mr-2 bg-foreground text-background hover:bg-foreground/90 gap-2 h-10 px-6 rounded-full font-medium"
                                 size="sm"
                             >
-                                <Lock className="h-3.5 w-3.5" />
+                                <Lock className="h-4 w-4" />
                                 Planı Kilitle
                             </Button>
                         )}
 
                         {isLocked && (
-                            <div className="mr-2 flex items-center gap-3">
-                                <div className="hidden items-center gap-1.5 rounded-full bg-purple-50 px-3 py-1 text-xs font-medium text-purple-700 md:flex">
+                            <div className="mr-2 flex items-center gap-4">
+                                <div className="hidden items-center gap-2 rounded-full border border-primary/20 bg-primary/5 px-4 py-1.5 text-xs font-medium text-primary md:flex">
                                     <Timer className="h-3.5 w-3.5" />
                                     <span>{timeLeft}</span>
                                 </div>
                                 <Button
                                     variant={isReadyToUnlock ? "primary" : "outline"}
                                     size="sm"
-                                    className="h-8 text-xs"
+                                    className="h-10 px-5 text-sm rounded-full"
                                     onClick={() => setIsModalOpen(true)}
                                 >
                                     {isReadyToUnlock ? "Kilidi Aç & Değerlendir" : "Haftayı Bitir"}
@@ -106,22 +106,24 @@ export function Header() {
                             </div>
                         )}
 
-                        <Button variant="ghost" size="sm" className="h-9 w-9 p-0 rounded-full">
-                            <Bell className="h-5 w-5 text-gray-500" />
-                        </Button>
-
-                        <div className="relative group">
-                            <Button variant="ghost" size="sm" className="h-9 w-9 p-0 rounded-full border border-gray-200">
-                                <User className="h-5 w-5 text-gray-600" />
+                        <div className="flex items-center gap-2 border-l border-foreground/10 pl-4 ml-2">
+                            <Button variant="ghost" size="icon" className="h-10 w-10 p-0 rounded-full hover:bg-foreground/5 text-foreground-muted hover:text-foreground">
+                                <Bell className="h-5 w-5" />
                             </Button>
-                            <div className="absolute right-0 top-full mt-2 w-48 origin-top-right rounded-xl border border-gray-100 bg-white p-1 shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform">
-                                <button
-                                    onClick={handleSignOut}
-                                    className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                                >
-                                    <LogOut className="h-4 w-4" />
-                                    Çıkış Yap
-                                </button>
+
+                            <div className="relative group">
+                                <Button variant="ghost" size="icon" className="h-10 w-10 p-0 rounded-full border border-foreground/10 hover:border-foreground/30 text-foreground-muted hover:text-foreground">
+                                    <User className="h-5 w-5" />
+                                </Button>
+                                <div className="absolute right-0 top-full mt-2 w-48 origin-top-right rounded-lg border border-foreground/5 bg-background p-1 shadow-soft opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform scale-95 group-hover:scale-100">
+                                    <button
+                                        onClick={handleSignOut}
+                                        className="flex w-full items-center gap-2 rounded-md px-3 py-2 text-sm text-error hover:bg-error/5 transition-colors font-medium"
+                                    >
+                                        <LogOut className="h-4 w-4" />
+                                        Çıkış Yap
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -40,11 +40,11 @@ export function WeekColumn({ title, category, tasks, accentColor = 'bg-gray-100'
     };
 
     return (
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full p-6 md:p-8">
             {/* Header */}
-            <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-lg font-bold text-gray-900">{title}</h2>
-                <span className={clsx("rounded-full px-2.5 py-0.5 text-xs font-semibold", accentColor)}>
+            <div className="mb-8 flex items-center justify-between">
+                <h2 className="text-xl font-serif font-medium text-foreground">{title}</h2>
+                <span className={clsx("rounded-md px-2 py-1 text-xs font-bold tracking-wider uppercase", accentColor)}>
                     {tasks.length}
                 </span>
             </div>
@@ -52,7 +52,7 @@ export function WeekColumn({ title, category, tasks, accentColor = 'bg-gray-100'
             {/* Task List Container */}
             <div
                 ref={setNodeRef}
-                className="flex-1 space-y-3 rounded-3xl bg-gray-50/50 p-2 min-h-[200px]"
+                className="flex-1 space-y-4 min-h-[200px]"
             >
                 <SortableContext items={tasks.map(t => t.id)} strategy={verticalListSortingStrategy}>
                     {tasks.map((task) => (
@@ -60,27 +60,26 @@ export function WeekColumn({ title, category, tasks, accentColor = 'bg-gray-100'
                     ))}
                 </SortableContext>
 
-                {tasks.length === 0 && ( // Removed !isAdding
-                    <div className="flex h-32 items-center justify-center rounded-xl border border-dashed border-gray-200 bg-gray-50/50 text-sm text-gray-400">
+                {tasks.length === 0 && (
+                    <div className="flex h-32 items-center justify-center rounded-lg border border-dashed border-foreground/10 bg-transparent text-sm text-foreground-muted font-light">
                         Henüz görev yok
                     </div>
                 )}
 
-                {/* Add Input - Only allow adding if not 'planned' usually? Or allow all? */}
-                {/* Design choice: Can user add to "Planned" mid-week? Maybe not. */}
+                {/* Add Input */}
                 {category !== 'planned' && !currentWeek?.is_locked && (
                     <form
                         onSubmit={handleAddTask}
-                        className="mt-4 flex items-center gap-2"
+                        className="mt-6 flex items-center gap-2"
                     >
-                        <div className="relative flex-1">
-                            <Plus className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+                        <div className="relative flex-1 group">
+                            <Plus className="absolute left-0 top-1/2 h-4 w-4 -translate-y-1/2 text-foreground-muted group-hover:text-primary transition-colors" />
                             <input
                                 type="text"
                                 value={newTaskContent}
                                 onChange={(e) => setNewTaskContent(e.target.value)}
                                 placeholder="Görev ekle..."
-                                className="h-10 w-full rounded-lg border border-gray-200 bg-white pl-9 pr-3 text-sm placeholder-gray-400 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                                className="h-10 w-full bg-transparent border-b border-foreground/10 pl-7 pr-3 text-base placeholder-foreground-muted/50 focus:border-primary focus:outline-none focus:ring-0 transition-colors font-light"
                             />
                         </div>
                     </form>

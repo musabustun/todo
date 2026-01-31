@@ -45,17 +45,17 @@ export function TaskItem({ task, isOverlay }: TaskItemProps) {
             ref={setNodeRef}
             style={style}
             className={clsx(
-                'group relative flex items-center gap-3 rounded-xl border bg-white p-3 shadow-sm transition-all',
-                isDragging ? 'z-50 opacity-50 ring-2 ring-primary' : 'hover:border-primary/50',
-                isOverlay ? 'cursor-grabbing shadow-xl ring-2 ring-primary' : '',
-                task.is_completed && 'bg-gray-50'
+                'group relative flex items-start gap-4 p-3 transition-all rounded-lg',
+                isDragging ? 'z-50 opacity-50 bg-foreground/5' : 'hover:bg-foreground/[0.02]',
+                isOverlay ? 'cursor-grabbing shadow-soft bg-background border border-foreground/10' : '',
+                task.is_completed && 'opacity-60' // Dim completed tasks
             )}
         >
             {/* Drag Handle */}
             <button
                 {...attributes}
                 {...listeners}
-                className="cursor-grab text-gray-300 opacity-0 group-hover:opacity-100 active:cursor-grabbing hover:text-gray-500"
+                className="mt-1 cursor-grab text-foreground-muted/30 opacity-0 group-hover:opacity-100 active:cursor-grabbing hover:text-foreground transition-all"
             >
                 <GripVertical className="h-4 w-4" />
             </button>
@@ -64,10 +64,10 @@ export function TaskItem({ task, isOverlay }: TaskItemProps) {
             <button
                 onClick={toggleCompleted}
                 className={clsx(
-                    'flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border transition-colors',
+                    'mt-0.5 flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-sm border transition-all duration-300',
                     task.is_completed
-                        ? 'border-green-500 bg-green-50 text-green-600'
-                        : 'border-gray-300 text-transparent hover:border-gray-400'
+                        ? 'border-primary bg-primary text-primary-foreground'
+                        : 'border-foreground/20 bg-transparent hover:border-primary/50'
                 )}
             >
                 <CheckCircle className={clsx('h-3.5 w-3.5', !task.is_completed && 'hidden')} />
@@ -76,8 +76,8 @@ export function TaskItem({ task, isOverlay }: TaskItemProps) {
             {/* Content */}
             <span
                 className={clsx(
-                    'flex-1 text-sm text-gray-700 font-medium break-all',
-                    task.is_completed && 'text-gray-400 line-through decoration-gray-300'
+                    'flex-1 text-base text-foreground font-light leading-relaxed break-all transition-all', // Increased font size and lighter weight
+                    task.is_completed && 'text-foreground-muted line-through decoration-foreground/20 decoration-1'
                 )}
             >
                 {task.content}
@@ -86,9 +86,9 @@ export function TaskItem({ task, isOverlay }: TaskItemProps) {
             {/* Actions */}
             <Button
                 variant="ghost"
-                size="sm"
+                size="icon"
                 onClick={() => deleteTask(task.id)}
-                className="h-8 w-8 p-0 text-gray-300 opacity-0 transition-opacity hover:text-red-500 group-hover:opacity-100"
+                className="h-8 w-8 p-0 text-foreground-muted/30 opacity-0 transition-all hover:text-error hover:bg-error/10 group-hover:opacity-100"
             >
                 <Trash2 className="h-4 w-4" />
             </Button>

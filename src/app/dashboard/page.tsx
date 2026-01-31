@@ -71,37 +71,38 @@ export default function Dashboard() {
             onDragStart={handleDragStart}
             onDragEnd={handleDragEnd}
         >
-            <div className="grid h-full gap-6 md:grid-cols-3">
+            <div className="grid h-full border-t border-b border-foreground/10 divide-y md:divide-y-0 md:divide-x divide-foreground/10 bg-background">
                 {/* Column 1: Planned (Read Only / Checkable) */}
-                <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+                <div className="md:h-[calc(100vh-10rem)] overflow-y-auto">
                     <WeekColumn
                         category="planned"
                         title="Ne Yapacaktım"
                         tasks={plannedTasks}
-                        accentColor="bg-purple-100 text-purple-700"
-                        isRestricted={currentWeek?.is_locked} // Can't add new planned tasks if locked (logic may vary)
-                        isDropDisabled={true} // Can't drop here usually, unless reverting? Let's say yes for now
+                        accentColor="bg-primary/5 text-primary" // Subtle
+                        isRestricted={currentWeek?.is_locked}
+                        isDropDisabled={true}
                     />
                 </div>
 
                 {/* Column 2: What I Did (The focus) */}
-                <div className="rounded-3xl bg-white p-6 shadow-xl shadow-gray-200/50 ring-1 ring-primary/10 relative overflow-hidden">
-                    <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-primary to-secondary" />
+                <div className="relative md:h-[calc(100vh-10rem)] overflow-y-auto bg-grain">
+                    {/* Focus Indicator */}
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary/50 to-secondary/50" />
                     <WeekColumn
                         title="Ne Yaptım"
                         category="done"
                         tasks={doneTasks}
-                        accentColor="bg-green-100 text-green-700"
+                        accentColor="bg-secondary/5 text-secondary"
                     />
                 </div>
 
                 {/* Next */}
-                <div className="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-gray-100">
+                <div className="md:h-[calc(100vh-10rem)] overflow-y-auto">
                     <WeekColumn
                         title="Ne Yapacağım"
                         category="next"
                         tasks={nextTasks}
-                        accentColor="bg-blue-100 text-blue-700"
+                        accentColor="bg-accent/20 text-accent-foreground"
                     />
                 </div>
             </div>
